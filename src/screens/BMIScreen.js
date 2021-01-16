@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const BMIScreen = () => {
   const [tinggi, setTinggi] = useState(null);
@@ -7,20 +7,23 @@ const BMIScreen = () => {
   const [bmi, setBmi] = useState(null);
   const rumus = berat / Math.pow(tinggi, 2);
 
-  const clickHandler = () => {
-    setBmi(rumus);
-    if (bmi !== 0 && bmi < 18.5) {
+  useEffect(() => {
+    if (bmi && bmi <= 18.5) {
       setPesan('Kekurangan berat badan.');
     }
-    if (bmi !== 0 && bmi < 25) {
+    if (bmi && bmi >= 18.5 && bmi <= 25) {
       setPesan('Berat badan ideal.');
     }
-    if (bmi !== 0 && bmi < 29) {
+    if (bmi && bmi >= 25 && bmi <= 30) {
       setPesan('Overweight, tapi tidak obese.');
     }
-    if (bmi !== 0 && bmi > 30) {
+    if (bmi && bmi > 30) {
       setPesan('Obesitas.');
     }
+  }, [bmi])
+
+  const clickHandler = () => {
+    setBmi(rumus);
     console.log(rumus);
     console.log(berat);
     console.log(tinggi);
@@ -30,7 +33,7 @@ const BMIScreen = () => {
     <div className="m-12 text-center h-screen">
       <h1 className="font-bold text-2xl mb-6">Body Mass Index</h1>
       {bmi !== 0 && bmi}
-      {pesan !== '' && <h1>{pesan}</h1>}
+      {pesan === '' ? <h1>Mohon masukkan data</h1> : <h1>{pesan}</h1>}
       <div className="flex items-center flex-col mb-8">
         <>
           <label className="font-bold" htmlFor="bb">
